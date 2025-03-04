@@ -1,17 +1,19 @@
 const deviceSelect = document.querySelector(".deviceSelect");
 const changeDeviceButton = document.querySelector(".changeDeviceButton");
 
+const headers = {
+  token: "8Xaga7saS2hOdo58JPh9UAiZDLZmfWZJ",
+  "user-agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0",
+  userid: "523131",
+};
+
 const getListDevice = async () => {
   try {
     const { data } = await axios.get(
       "https://api.vmoscloud.com/vcpcloud/api/userEquipment/getUpOrDownEquipmentList?equipmentId=261507",
       {
-        headers: {
-          token: "8Xaga7saS2hOdo58JPh9UAiZDLZmfWZJ",
-          "user-agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0",
-          userid: "523131",
-        },
+        headers,
       }
     );
 
@@ -42,14 +44,19 @@ const data = getListDevice().then((res) => {
 
 changeDeviceButton.addEventListener("click", () => {
   targetConfigId = Number(deviceSelect.value);
-  axios.post(
+  const data = axios.post(
     "https://api.vmoscloud.com/vcpcloud/api/userEquipment/addUpOrDownTask",
     {
-      data: {
-        equipmentId: 261507,
-        targetConfigId: targetConfigId,
-        holdDataFlag: false,
-      },
+      equipmentId: 261507,
+      targetConfigId: targetConfigId,
+      holdDataFlag: false,
+    },
+    {
+      headers,
     }
   );
+
+  data.then((res) => {
+    console.log(res);
+  });
 });
